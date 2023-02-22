@@ -1,12 +1,15 @@
-#library
+#使用方法：using "ctrl+F" to replace "4-2" to the target, ex:"4-2"
+
+
+#library 要使用install.packages("library")安裝
 library(tibble)
 library(reshape2)
 library(vtable)
 library(kableExtra)
 library(rstatix)
 
-#讀資料
-Data <-read.csv("csv(revised)/1-1.csv")
+#讀資料 (點上方session -> set working directory)
+Data <-read.csv("csv(revised)/4-2.csv")
 
 #改格式
 Data1 <-subset(Data, select = c(Im,Im.1))
@@ -43,23 +46,28 @@ st(Data4m, group = 'question')
 boxplot(score~question, data = Data4m)
 
 # #factorized
-Data1m$id <-factor(Data1m$id)
+#Data1m$id <-factor(Data1m$id)
 # Data2m$id <-factor(Data2m$id)
 # Data3m$id <-factor(Data3m$id)
 # Data4m$id <-factor(Data4m$id)
 
 #one way repeated anova(If satisfied the assumption of sphericity)
+#save the results to anova_results
 model1 <- aov(score~factor(question)+Error(factor(id)/factor(question)), data = Data1m)
 summary(model1)
+capture.output(summary(model1), file = "anova_results/4-2/4-2(Im).txt")
 
 model2 <- aov(score~factor(question)+Error(factor(id)/factor(question)), data = Data2m)
 summary(model2)
+capture.output(summary(model2), file = "anova_results/4-2/4-2(Cos).txt")
 
 model3 <- aov(score~factor(question)+Error(factor(id)/factor(question)), data = Data3m)
 summary(model3)
+capture.output(summary(model3), file = "anova_results/4-2/4-2(En).txt")
 
 model4 <- aov(score~factor(question)+Error(factor(id)/factor(question)), data = Data4m)
 summary(model4)
+capture.output(summary(model4), file = "anova_results/4-2/4-2(Com).txt")
 
 #事後檢定(pairwise paired t test with bonferroni corection)
 # ppt <- with(Data1m,
